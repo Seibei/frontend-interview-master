@@ -37,17 +37,17 @@ const mutations = {
   filterBy(state: MoviesState, type: string): void {
     state.filteredBy = type;
   },
-  setNextPage(state: MoviesState) {
+  setNextPage(state: MoviesState): void {
     if (state.currentPage < state.numberOfPages) {
       state.currentPage += 1;
     }
   },
-  setPrevPage(state: MoviesState) {
+  setPrevPage(state: MoviesState): void {
     if (state.currentPage > 1) {
       state.currentPage -= 1;
     }
   },
-  setNumberOfPages(state: MoviesState, payload: number) {
+  setNumberOfPages(state: MoviesState, payload: number): void {
     state.numberOfPages = payload;
   },
 };
