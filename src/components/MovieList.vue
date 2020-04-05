@@ -1,8 +1,8 @@
 <template>
   <ul class="movie-list">
     <MovieListItem
-      v-for="movie in filtered"
-      :key="movie.imdbID"
+      v-for="(movie, index) in filtered"
+      :key="index"
       :movie="movie"
       />
   </ul>
@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { mapActions, mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import MovieListItem from './MovieListItem.vue';
 
 export default Vue.extend({
@@ -19,15 +19,14 @@ export default Vue.extend({
     ...mapGetters([
       'filtered',
     ]),
+    ...mapState([
+      'moviesList',
+    ]),
   },
   async created() {
-    await this.loadMovies();
-  },
-  methods: {
-    ...mapActions([
-      'loadMovies',
-      'sortMovies',
-    ]),
+    if (!this.moviesList.length) {
+      await this.$store.dispatch('loadMovies');
+    }
   },
   components: {
     MovieListItem,

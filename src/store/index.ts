@@ -31,6 +31,9 @@ const mutations = {
   setMoviesList(state: MoviesState, moviesList: Movie[]): void {
     state.moviesList = [...moviesList];
   },
+  addToCurrent(state: MoviesState, moviesList: Movie[]): void {
+    state.moviesList = [...state.moviesList, ...moviesList];
+  },
   setMovie(state: MoviesState, movie: MovieDetail): void {
     state.movie = movie;
   },
@@ -40,11 +43,6 @@ const mutations = {
   setNextPage(state: MoviesState): void {
     if (state.currentPage < state.numberOfPages) {
       state.currentPage += 1;
-    }
-  },
-  setPrevPage(state: MoviesState): void {
-    if (state.currentPage > 1) {
-      state.currentPage -= 1;
     }
   },
   setNumberOfPages(state: MoviesState, payload: number): void {
@@ -70,9 +68,13 @@ const actions = {
       console.log(e);
     }
   },
-  async loadMore({ commit, dispatch }: ActionContext<MoviesState, MoviesState>, handler: string): Promise<void> {
-    commit(handler);
-    dispatch('loadMovies');
+  async loadMore({ commit }: ActionContext<MoviesState, MoviesState>): Promise<void> {
+    try {
+      const result = await MovieService.movieService.getMovieList(state.user.apiToken, state.currentPage);
+      commit('addToCurrent', result.result);
+    } catch (e) {
+      console.log(e);
+    }
   },
 };
 
