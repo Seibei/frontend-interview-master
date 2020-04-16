@@ -9,22 +9,32 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { mapState, mapActions } from 'vuex';
+import { mapState } from 'vuex';
+import MovieService from '@/services/MovieService';
+import { Movie } from '@/services/types';
 
 export default Vue.extend({
   name: 'MovieView',
   async created() {
-    this.loadMovie(this.$route.params.movieId);
+    await this.loadMovie();
   },
+  data: () => ({
+    movie: {} as Movie,
+  }),
   computed: {
     ...mapState([
-      'movie',
+      'user',
     ]),
   },
   methods: {
-    ...mapActions([
-      'loadMovie',
-    ]),
+    async loadMovie() {
+      try {
+        const result = await MovieService.movieService.getSpecificMovie(this.user.apiToken, this.$route.params.movieId);
+        this.movie = result;
+      } catch (e) {
+        console.log(e);
+      }
+    },
   },
 });
 </script>

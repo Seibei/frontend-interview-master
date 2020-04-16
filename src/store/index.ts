@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Vuex, { ActionContext } from 'vuex';
 import MovieService from '@/services/MovieService';
-import { Movie, MovieDetail } from '../services/types';
+import { Movie } from '@/services/types';
 import { MoviesState } from './types';
 
 Vue.use(Vuex);
@@ -12,7 +12,6 @@ const state: MoviesState = {
     apiToken: '273b9080',
   },
   moviesList: [],
-  movie: {},
   filteredBy: '',
   currentPage: 1,
   numberOfPages: 0,
@@ -34,9 +33,6 @@ const mutations = {
   addToCurrent(state: MoviesState, moviesList: Movie[]): void {
     state.moviesList = [...state.moviesList, ...moviesList];
   },
-  setMovie(state: MoviesState, movie: MovieDetail): void {
-    state.movie = movie;
-  },
   filterBy(state: MoviesState, type: string): void {
     state.filteredBy = type;
   },
@@ -56,14 +52,6 @@ const actions = {
       const result = await MovieService.movieService.getMovieList(state.user.apiToken, state.currentPage);
       commit('setMoviesList', result.result);
       commit('setNumberOfPages', Math.ceil(result.numberOfResult / 10));
-    } catch (e) {
-      console.log(e);
-    }
-  },
-  async loadMovie({ state, commit }: ActionContext<MoviesState, MoviesState>, id: string): Promise<void> {
-    try {
-      const result = await MovieService.movieService.getSpecificMovie(state.user.apiToken, id);
-      commit('setMovie', result);
     } catch (e) {
       console.log(e);
     }
