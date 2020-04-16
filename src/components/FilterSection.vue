@@ -11,14 +11,19 @@
 import Vue from 'vue';
 import { mapMutations } from 'vuex';
 
+interface Filter {
+  title: string;
+  filter: string;
+}
+
 export default Vue.extend({
-  name: 'MovieList',
+  name: 'FilterSection',
   data: () => ({
     filters: [
       { title: 'All', filter: '' },
       { title: 'Movies', filter: 'movie' },
       { title: 'Series', filter: 'series' },
-    ],
+    ] as Filter[],
   }),
   methods: {
     ...mapMutations([

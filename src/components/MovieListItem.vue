@@ -7,7 +7,6 @@
 
 <script lang="ts">
 import Vue, { PropOptions } from 'vue';
-
 import { Movie } from '@/services/types';
 
 export default Vue.extend({
